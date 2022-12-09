@@ -24,8 +24,8 @@
 
 class Solution:
     def __init__(self):
-        # numerator, denominator -> quotient, remainder, step
-        self.divisions: 'dict[(int, int), (int, int, int)]' = {}
+        # numerator -> remainder, idx
+        self.divisions: 'dict[int, (int, int)]' = {}
 
     def _divide(self, numerator, denominator):
         """
@@ -62,14 +62,14 @@ class Solution:
 
         while numerator != 0:
 
-            if (numerator, denominator) not in self.divisions:
+            if numerator not in self.divisions:
                 q, r = self._divide(numerator, denominator)
-                self.divisions[(numerator, denominator)] = (q, r, len(result))
+                self.divisions[numerator] = (r, len(result))
 
                 result += str(q)
                 numerator = r*10
             else: # found recurring fraction
-                q, r, idx = self.divisions[(numerator, denominator)]
+                _, idx = self.divisions[numerator]
                 result = result[:idx] + "(" + result[idx:] + ")"
                 break
 
